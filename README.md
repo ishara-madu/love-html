@@ -15,8 +15,6 @@ A playful and romantic web application that asks, "Do You Love Me?" with a fun t
 
 ![Do You Love Me? Screenshot](./screenshot.png)
 
-*Note*: Replace the placeholder image above with a real screenshot of your app. To add a screenshot, capture your app in action (e.g., on the first or second page), save it as `screenshot.png` in your repository, and update the image path to `./screenshot.png`.
-
 ## Installation
 
 1. **Clone the Repository**:
