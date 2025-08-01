@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Do You Love Me?</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@0.11.0/dist/js-confetti.browser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #ffb1c8 0%, #d8b4fe 100%);
+            touch-action: none;
+            overflow: hidden;
+            color: #ad1457;
+        }
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease;
+        }
+        #first-page {
+            opacity: 1;
+        }
+        #second-page {
+            opacity: 0;
+            pointer-events: none;
+        }
+        h1 {
+            margin: 20px 0;
+            font-size: 36px;
+            text-align: center;
+            padding: 0 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.5);
+        }
+        .image-container {
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+        }
+        .second-image-container {
+            margin: 20px 0;
+        }
+        .second-image-container img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 5px solid #ffc1cc;
+            box-shadow: 0 8px 16px rgba(255, 182, 193, 0.4);
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+            touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+        #yes {
+            background: linear-gradient(45deg, #ff80ab, #ea80fc);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.5);
+        }
+        #yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(255, 105, 180, 0.7);
+        }
+        #yes::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.5), transparent);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s;
+        }
+        #yes:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        #no {
+            background: linear-gradient(45deg, #b0bec5, #90a4ae);
+            color: #fff;
+            position: relative;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 10px rgba(144, 164, 174, 0.5);
+        }
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .heart {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: url('https://img.icons8.com/emoji/48/000000/heart-suit.png') no-repeat center;
+            background-size: cover;
+            opacity: 0.7;
+            animation: float 8s infinite;
+        }
+        .burst-heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('https://img.icons8.com/emoji/48/000000/heart-suit.png') no-repeat center;
+            background-size: cover;
+            animation: burst 1.8s ease-out forwards;
+            z-index: 10;
+        }
+        .sparkle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: url('https://img.icons8.com/emoji/48/000000/sparkles.png') no-repeat center;
+            background-size: cover;
+            opacity: 0.8;
+            animation: sparkle 2s infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes burst {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2.5) translateY(-150px) rotate(720deg); opacity: 0; }
+        }
+        @keyframes sparkle {
+            0% { transform: scale(0.5) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0.5) rotate(360deg); opacity: 0.8; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+        .shake {
+            animation: shake 0.6s ease-in-out;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 28px; }
+            .image-container img { width: 140px; height: 140px; }
+            .second-image-container img { width: 200px; height: 200px; }
+            button { padding: 12px 25px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="first-page" class="page">
+        <div class="image-container">
+            <img src="https://media1.tenor.com/m/sdjiLWIMhN4AAAAC/facebook.gif" alt="Heart Image">
+        </div>
+        <h1 id="question">Do you love me?</h1>
+        <div class="buttons" id="buttons">
+            <button id="yes">Yes</button>
+            <button id="no">No</button>
+        </div>
+    </div>
+    <div id="second-page" class="page">
+        <h1 id="love-message">I love you too, my sweetheart! 💖</h1>
+        <div class="second-image-container">
+            <img src="https://media1.tenor.com/m/PpV43ddYxr8AAAAC/peach-goma.gif" alt="Your Image">
+        </div>
+    </div>
+    <div class="hearts" id="hearts"></div>
+    <script>
+        const noButton = document.getElementById('no');
+        const yesButton = document.getElementById('yes');
+        const body = document.body;
+        const firstPage = document.getElementById('first-page');
+        const secondPage = document.getElementById('second-page');
+        const loveMessage = document.getElementById('love-message');
+        const heartsContainer = document.getElementById('hearts');
+        const jsConfetti = new JSConfetti();
+
+        // Create floating hearts and sparkles
+        for (let i = 0; i < 25; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDelay = `${Math.random() * 8}s`;
+            heartsContainer.appendChild(heart);
+        }
+        for (let i = 0; i < 15; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.top = `${Math.random() * 100}%`;
+            sparkle.style.animationDelay = `${Math.random() * 2}s`;
+            heartsContainer.appendChild(sparkle);
+        }
+
+        // Create burst hearts effect
+        function createBurstHearts() {
+            const colors = ['#ff80ab', '#ea80fc', '#ff4081', '#f8bbd0'];
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'burst-heart';
+                heart.style.left = `${50 + (Math.random() - 0.5) * 300}px`;
+                heart.style.top = `${50 + (Math.random() - 0.5) * 300}px`;
+                heart.style.transform = `scale(${0.7 + Math.random() * 1.5})`;
+                heart.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+                heartsContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 1800);
+            }
+        }
+
+        function moveNoButton(clientX, clientY) {
+            const rect = noButton.getBoundingClientRect();
+            const buttonX = rect.left + rect.width / 2;
+            const buttonY = rect.top + rect.height / 2;
+            const distance = Math.hypot(clientX - buttonX, clientY - buttonY);
+
+            if (distance < 150) {
+                const angle = Math.atan2(clientY - buttonY, clientX - buttonX);
+                const moveX = Math.cos(angle) * -80;
+                const moveY = Math.sin(angle) * -80;
+
+                let newX = rect.left + moveX;
+                let newY = rect.top + moveY;
+
+                newX = Math.max(0, Math.min(newX, window.innerWidth - rect.width));
+                newY = Math.max(0, Math.min(newY, window.innerHeight - rect.height));
+
+                noButton.style.transform = `translate(${newX - rect.left}px, ${newY - rect.top}px)`;
+            }
+        }
+
+        // Mouse movement handling
+        body.addEventListener('mousemove', (event) => {
+            moveNoButton(event.clientX, event.clientY);
+        });
+
+        // Touch movement handling
+        body.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            const touch = event.touches[0];
+            moveNoButton(touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        // Handle click/touch on "No" button
+        noButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            moveNoButton(event.clientX, event.clientY);
+        });
+        noButton.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            const touch = event.touches[0];
+            moveNoButton(touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        // Handle "Yes" button click/touch
+        yesButton.addEventListener('click', () => {
+            firstPage.style.opacity = '0';
+            firstPage.style.pointerEvents = 'none';
+            secondPage.style.opacity = '1';
+            secondPage.style.pointerEvents = 'auto';
+            loveMessage.classList.add('shake');
+            createBurstHearts();
+            jsConfetti.addConfetti({
+                emojis: ['💖', '✨', '😘', '🌸'],
+                emojiSize: 60,
+                confettiNumber: 80,
+                confettiRadius: 8,
+            });
+        });
+    </script>
+</body>
+</html>
